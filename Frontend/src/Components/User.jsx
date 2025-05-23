@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Usercontextp } from "../context/Usercontext";
 
-export default function User({ name, lastMessage, selectfn }) {
+export default function User({ id, name, lastMessage }) {
+  const { selectedUser, setselectedUser, getMessages } =
+    useContext(Usercontextp);
+  const handleClick = () => {
+    const temp = {
+      _id: id,
+      name: name,
+    };
+    if (!selectedUser || selectedUser._id !== temp._id) {
+      setselectedUser(temp);
+    }
+  };
+
   return (
     <div
       className="flex justify-center items-center min-h-[50px] flex-shrink-0  p-2 hover:bg-gray-800 cursor-pointer rounded-2xl"
-      onClick={() => selectfn(true)}
+      onClick={handleClick}
     >
       <div className="w-[18%] h-full ">
         <div className="rounded-full w-[50px] h-[50px] bg-white"></div>

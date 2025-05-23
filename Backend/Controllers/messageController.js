@@ -10,7 +10,11 @@ async function sendMsg(req, res) {
       recieverId: data.recieverId,
       message: data.message,
     });
-    return res.json({ success: "true", msg: "Message sent successfully" });
+    return res.json({
+      success: "true",
+      msg: "Message sent successfully",
+      msgObj: result,
+    });
   } catch (error) {
     return res.json({ success: "false", msg: error.message });
   }

@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Usercontextp } from "../context/Usercontext";
 
 export default function Signup() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSignup = () => {};
+  const data = useContext(Usercontextp);
+  const handleSignup = async () => {
+    return data.signupUser(name, email, password);
+  };
   return (
     <div className="w-full h-full bg-[#1A1C20] rounded-2xl flex flex-col justify-center items-center gap-[60px]">
       <h1 className="font-gara  text-5xl text-gray-200">Signup</h1>

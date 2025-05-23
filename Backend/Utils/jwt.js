@@ -9,7 +9,7 @@ const verifyToken = (token) => {
   }
 };
 const createToken = (payload) => {
-  const token = jwt.sign(payload, process.env.JWT_SECRET);
+  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "7d" });
   return token;
 };
 module.exports = { verifyToken, createToken };

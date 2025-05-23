@@ -6,8 +6,8 @@ const { msgRouter } = require("./Routes/messageRoutes");
 require("dotenv").config();
 
 const app = express();
-app.use(cors({ origin: "*" }));
 app.use(express.json());
+app.use(cors({ origin: "*" }));
 
 connecttoDB(); //connect to local db initially
 app.use("/api/auth", userRouter);

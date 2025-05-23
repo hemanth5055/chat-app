@@ -24,7 +24,12 @@ async function login(req, res) {
         } else {
           const payload = { _id: user.id, name: user.name };
           const token = createToken(payload);
-          return res.json({ success: "true", token, msg: "login successfull" });
+          return res.json({
+            success: "true",
+            token,
+            msg: "login successfull",
+            user: payload,
+          });
         }
       }
     }
@@ -68,7 +73,28 @@ async function signup(req, res) {
   }
 }
 async function checkAuth(req, res) {
-  return res.json({ success: "true", msg: "Authorization valid" });
+  return res.json({
+    success: "true",
+    msg: "Authorization valid",
+    user: req.user,
+  });
+}
+async function getUsers(req, res) {
+  try {
+    const result = await User.find(
+      { _id: { $ne: req.user._id } },
+      { _id: 1, name: 1 }
+    );
+    if (!result)
+      return res.json({ success: "false", msg: "Something went wrong" });
+    return res.json({
+      success: "true",
+      msg: "Retrieved all Users",
+      allusers: result,
+    });
+  } catch (error) {
+    return res.json({ success: "false", msg: error.message });
+  }
 }
 
-module.exports = { login, signup, checkAuth };
+module.exports = { login, signup, checkAuth, getUsers };

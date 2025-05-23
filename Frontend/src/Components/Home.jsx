@@ -1,25 +1,41 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { LuSendHorizontal } from "react-icons/lu";
 import { PiChatCircleLight } from "react-icons/pi";
 import { MdLogout } from "react-icons/md";
-
 import { RxEraser } from "react-icons/rx";
-
 import User from "./User";
 import Message from "./Message";
+import { Usercontextp } from "../context/Usercontext";
 
 export default function Home() {
   const [usertosearch, setUsertosearch] = useState("");
-  const [selectedUser, setSelectedUser] = useState(false);
+  const [message, setMessage] = useState("");
+  const {
+    user,
+    checkAuth,
+    selectedUser,
+    availableusers,
+    logoutUser,
+    getMessages,
+    messages,
+    sendMessage,
+  } = useContext(Usercontextp);
   const SearchUser = () => {};
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
+    checkAuth();
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, []);
+
+  useEffect(() => {
+    if (user && selectedUser) {
+      getMessages();
+    }
+  }, [selectedUser]);
 
   return (
     <div className="w-full h-full rounded-2xl flex justify-center items-center overflow-hidden">
@@ -50,51 +66,39 @@ export default function Home() {
 
         {/* User List */}
         <div className="w-full flex flex-col gap-[15px] px-2 mt-[10px] h-full overflow-y-auto">
-          <User
-            name="Nishanth Reddy"
-            lastMessage="ok bye!"
-            selectfn={setSelectedUser}
-          />
-          <User
-            name="Tejaswinath"
-            lastMessage="Hmmm"
-            selectfn={setSelectedUser}
-          />
-          <User
-            name="Pranav Kumar"
-            lastMessage="Intership ??"
-            selectfn={setSelectedUser}
-          />
-          <User
-            name="Ranga Sainadh"
-            lastMessage="Have a Nice Day!"
-            selectfn={setSelectedUser}
-          />
-          <User
-            name="Ranga Sainadh"
-            lastMessage="Have a Nice Day!"
-            selectfn={setSelectedUser}
-          />
+          {availableusers?.map((item, index) => (
+            <User
+              name={item.name}
+              key={item._id}
+              id={item._id}
+              lastMessage="ok bye!"
+            />
+          ))}
         </div>
 
         <div className="flex justify-between px-5 w-full h-[70px] items-start">
           <h1 className="font-mont text-[#42A4CB] font-medium text-[18px]">
-            Kanala Hemanth Reddy
+            {user?.name}
           </h1>
-          <div className="w-[30px] h-[30px] bg-red-500 rounded-full cursor-pointer flex justify-center items-center">
+          <div
+            className="w-[30px] h-[30px] bg-red-500 rounded-full cursor-pointer flex justify-center items-center"
+            onClick={logoutUser}
+          >
             <MdLogout className="text-white"></MdLogout>
           </div>
         </div>
       </div>
 
       {/* Chat Container */}
-      {selectedUser ? (
+      {selectedUser != null ? (
         <div className="chatcontainer bg-[#20232D] w-[70%] h-full rounded-r-2xl gap-2 px-2 pt-4 pb-2 flex flex-col">
           {/* Chat Header */}
           <div className="w-full h-[80px] flex px-6 justify-between items-center">
             <div className="profile flex items-center gap-[15px]">
               <div className="h-[40px] w-[40px] rounded-full bg-gray-200"></div>
-              <h2 className="font-mont text-[20px] text-white">Tejaswinath</h2>
+              <h2 className="font-mont text-[20px] text-white">
+                {selectedUser.name}
+              </h2>
             </div>
             <div className="clearchat cursor-pointer h-[40px] w-[40px] flex justify-center items-center">
               <RxEraser className="text-white" size={20} />
@@ -108,8 +112,13 @@ export default function Home() {
           <div className="messagearea w-full flex flex-col flex-grow overflow-hidden p-2">
             {/* Messages Scrollable */}
             <div className="messages flex flex-col gap-2 overflow-y-auto flex-grow pr-1">
-              <Message self={false} message="Hey ! Where are you right now ?" />
-              <Message self={true} message="Infront CB exactly at footpath !" />
+              {messages?.map((item) => (
+                <Message
+                  key={item._id}
+                  self={user._id === item.senderId}
+                  message={item.message}
+                />
+              ))}
               <div ref={messagesEndRef} />
             </div>
 
@@ -120,11 +129,19 @@ export default function Home() {
                   type="text"
                   name="message"
                   id="message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                   placeholder="Type a message here . ."
                   className="w-[93%] h-full text-[16px] text-gray-100 font-mont pl-4 outline-none bg-transparent"
                 />
                 <div className="options h-full w-[50px] flex justify-center items-center">
-                  <div className="w-[40px] h-[40px] rounded-full bg-[#42A4CB] flex justify-center items-center">
+                  <div
+                    onClick={() => {
+                      sendMessage(message);
+                      setMessage("");
+                    }}
+                    className="w-[40px] h-[40px] rounded-full bg-[#42A4CB] cursor-pointer flex justify-center items-center"
+                  >
                     <LuSendHorizontal className="text-white" size={20} />
                   </div>
                 </div>
