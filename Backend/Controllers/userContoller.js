@@ -67,5 +67,8 @@ async function signup(req, res) {
     return res.json({ success: "false", msg: error.message });
   }
 }
+async function checkAuth(req, res) {
+  return res.json({ success: "true", msg: "Authorization valid" });
+}
 
-module.exports = { login, signup };
+module.exports = { login, signup, checkAuth };
