@@ -18,6 +18,9 @@ export const ContextFunc = ({ children }) => {
   const serverURL = import.meta.env.VITE_SERVER;
   const navigate = useNavigate();
   useEffect(() => {
+    checkAuth();
+  }, []);
+  useEffect(() => {
     localStorage.setItem("token", token);
   }, [token]);
   useEffect(() => {
@@ -77,6 +80,7 @@ export const ContextFunc = ({ children }) => {
       if (result.data.success == "true") {
         setToken(result.data.token);
         setUser(result.data.user);
+        getUsers();
         navigate("/");
       }
     } catch (error) {

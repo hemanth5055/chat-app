@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Usercontextp } from "../context/Usercontext";
 
@@ -6,10 +6,15 @@ export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const data = useContext(Usercontextp);
+  const {user,loginUser} = useContext(Usercontextp);
   const handleLogin = async () => {
-    return data.loginUser(email, password);
+    return await loginUser(email, password);
   };
+  useEffect(() => {
+    if (user) {
+      navigate("/"); // Redirect to homepage if logged in
+    }
+  }, [user]);
   return (
     <div className="w-full h-full bg-[#1A1C20] rounded-2xl flex flex-col justify-center items-center gap-[60px]">
       <h1 className="font-gara  text-5xl text-gray-200">Login</h1>
@@ -20,18 +25,16 @@ export default function Login() {
           name="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          id="email"
           placeholder="E-mail"
-          className="w-[35%] bg-white h-[55px] rounded-3xl font-medium outline-none text-xl font-mont pl-4 text-black"
+          className="w-[35%] max-sm:w-[80%] max-sm:text-[20px] bg-white h-[55px] rounded-3xl font-medium outline-none text-xl font-mont pl-4 text-black"
         />
         <input
           type="password"
           name="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          id="password"
           placeholder="Password"
-          className="w-[35%] bg-white h-[55px] rounded-3xl outline-none text-xl font-mont pl-4 text-black font-medium"
+          className="w-[35%] bg-white max-sm:w-[80%] max-sm:text-[20px] h-[55px] rounded-3xl outline-none text-xl font-mont pl-4 text-black font-medium"
         />
         <div
           onClick={handleLogin}
@@ -40,7 +43,7 @@ export default function Login() {
           Login
         </div>
       </div>
-      <h2 className="font-mont text-white font-medium">
+      <h2 className="font-mont text-white font-medium max-sm:text-center max-sm:w-[80%] ">
         Don't have an account ,
         <span
           className="text-[#42A4CB] cursor-pointer"

@@ -6,7 +6,7 @@ import Home from "./Components/Home";
 
 export default function App() {
   return (
-    <div className="w-full h-screen bg-[#3B3D48] p-4">
+    <div className="w-full h-screen bg-[#3B3D48] p-4 max-sm:p-2">
       <Routes>
         <Route path="/login" element={<Login></Login>}></Route>
         <Route path="/Signup" element={<Signup></Signup>}></Route>
