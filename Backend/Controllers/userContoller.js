@@ -68,7 +68,6 @@ async function signup(req, res) {
       }
     }
   } catch (error) {
-    console.log(error.message);
     return res.json({ success: "false", msg: error.message });
   }
 }

@@ -1,20 +1,28 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { io } from "socket.io-client";
+import { useRef } from "react";
 
 export const Usercontextp = React.createContext();
 
 export const ContextFunc = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [socketSt, setsocketSt] = useState(null);
   const [selectedUser, setselectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [availableusers, setAvailableusers] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const selectedUserRef = useRef(null);
+
   const serverURL = import.meta.env.VITE_SERVER;
   const navigate = useNavigate();
   useEffect(() => {
     localStorage.setItem("token", token);
   }, [token]);
+  useEffect(() => {
+    selectedUserRef.current = selectedUser;
+  }, [selectedUser]);
 
   const getUsers = async (usertoUse) => {
     if (!usertoUse) return;
@@ -48,6 +56,7 @@ export const ContextFunc = ({ children }) => {
       if (result.data.success == "true") {
         setUser(result.data.user);
         getUsers(result.data.user);
+        connectTosocket(result.data.user);
       } else {
         navigate("/login");
       }
@@ -125,12 +134,15 @@ export const ContextFunc = ({ children }) => {
     if (!msg) return;
     if (!selectedUser || !user) return;
     try {
+      const load = {
+        senderId: user._id,
+        recieverId: selectedUser._id,
+        message: msg,
+      };
       const result = await axios.post(
         `${serverURL}/api/msg/send`,
         {
-          senderId: user._id,
-          recieverId: selectedUser._id,
-          message: msg,
+          ...load,
         },
         {
           headers: {
@@ -145,10 +157,27 @@ export const ContextFunc = ({ children }) => {
           ...(prevMessages || []),
           result.data.msgObj,
         ]);
+        socketSt.emit("communication", result.data.msgObj);
       }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const connectTosocket = async (userf) => {
+    const socket = io.connect(serverURL);
+    socket.on("connect", () => {
+      setsocketSt(socket); // Assuming this is a state setter
+      socket.emit("SuccessfullConnection", `${userf._id}`);
+    });
+    socket.on("messageRecieved", (load) => {
+      const currentSelected = selectedUserRef.current;
+      if (currentSelected && currentSelected._id === load.senderId) {
+        setMessages((prevMessages) => [...(prevMessages || []), load]);
+      } else {
+        console.log("Message ignored: not from selected user");
+      }
+    });
   };
 
   const data = {
@@ -156,6 +185,7 @@ export const ContextFunc = ({ children }) => {
     availableusers,
     selectedUser,
     messages,
+    socketSt,
     getMessages,
     setMessages,
     setselectedUser,

@@ -44,4 +44,5 @@ async function getMsgs(req, res) {
     return res.json({ success: "false", msg: error.message });
   }
 }
+
 module.exports = { sendMsg, getMsgs };

@@ -3,7 +3,8 @@ import { FiSearch } from "react-icons/fi";
 import { LuSendHorizontal } from "react-icons/lu";
 import { PiChatCircleLight } from "react-icons/pi";
 import { MdLogout } from "react-icons/md";
-import { RxEraser } from "react-icons/rx";
+import { IoIosClose } from "react-icons/io";
+
 import User from "./User";
 import Message from "./Message";
 import { Usercontextp } from "../context/Usercontext";
@@ -15,6 +16,7 @@ export default function Home() {
     user,
     checkAuth,
     selectedUser,
+    setselectedUser,
     availableusers,
     logoutUser,
     getMessages,
@@ -42,7 +44,7 @@ export default function Home() {
       {/* Sidebar */}
       <div className="sidebar bg-[#1A1C20] w-[30%] h-full rounded-l-2xl flex flex-col items-center gap-[30px]">
         <div className="w-full flex justify-center items-end h-[100px]">
-          <h1 className="font-gara text-6xl text-gray-100">Vovo</h1>
+          <h1 className="font-gara text-5xl text-gray-100">Q-Chat</h1>
         </div>
 
         {/* Search */}
@@ -100,8 +102,13 @@ export default function Home() {
                 {selectedUser.name}
               </h2>
             </div>
-            <div className="clearchat cursor-pointer h-[40px] w-[40px] flex justify-center items-center">
-              <RxEraser className="text-white" size={20} />
+            <div
+              className="clearchat cursor-pointer h-[40px] w-[40px] flex justify-center items-center"
+              onClick={() => {
+                setselectedUser(null);
+              }}
+            >
+              <IoIosClose className="text-white" size={30} />
             </div>
           </div>
 
@@ -119,7 +126,7 @@ export default function Home() {
                   message={item.message}
                 />
               ))}
-              <div ref={messagesEndRef} />
+              <div className="w-full h-[10px]" ref={messagesEndRef} />
             </div>
 
             {/* Input Bar */}

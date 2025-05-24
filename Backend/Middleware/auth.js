@@ -4,12 +4,10 @@ const { verifyToken } = require("../Utils/jwt");
 async function protectRoute(req, res, next) {
   try {
     const token = req.headers.token;
-    console.log(token);
     const user = verifyToken(token);
     if (!user) {
       return res.json({ success: "false", msg: "Invalid/Expired token" });
     }
-    console.log(user);
     const userfromDB = await User.findOne({ _id: user._id });
     if (!userfromDB) {
       return res.json({ success: "false", msg: "No account exists" });
