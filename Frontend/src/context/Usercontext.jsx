@@ -13,6 +13,8 @@ export const ContextFunc = ({ children }) => {
   const [messages, setMessages] = useState([]);
   const [availableusers, setAvailableusers] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [onlineUsers, setOnlineUsers] = useState([]);
+
   const selectedUserRef = useRef(null);
 
   const serverURL = import.meta.env.VITE_SERVER;
@@ -58,7 +60,7 @@ export const ContextFunc = ({ children }) => {
       }
       if (result.data.success == "true") {
         setUser(result.data.user);
-        getUsers(result.data.user);
+        // getUsers(result.data.user);
         connectTosocket(result.data.user);
       } else {
         navigate("/login");
@@ -80,7 +82,7 @@ export const ContextFunc = ({ children }) => {
       if (result.data.success == "true") {
         setToken(result.data.token);
         setUser(result.data.user);
-        getUsers();
+        connectTosocket(result.data.user);
         navigate("/");
       }
     } catch (error) {
@@ -106,9 +108,11 @@ export const ContextFunc = ({ children }) => {
     }
   };
   const logoutUser = () => {
+    socketSt.disconnect(true);
     setUser(null);
     setAvailableusers(null);
     setselectedUser(null);
+    setOnlineUsers([]);
     localStorage.removeItem("token");
     navigate("/login");
   };
@@ -182,6 +186,13 @@ export const ContextFunc = ({ children }) => {
         console.log("Message ignored: not from selected user");
       }
     });
+    socket.on("userOnline", (userIds) => {
+      setOnlineUsers(userIds);
+    });
+
+    socket.on("userOffline", (userIds) => {
+      setOnlineUsers(userIds);
+    });
   };
 
   const data = {
@@ -190,6 +201,7 @@ export const ContextFunc = ({ children }) => {
     selectedUser,
     messages,
     socketSt,
+    onlineUsers,
     getMessages,
     setMessages,
     setselectedUser,

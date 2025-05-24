@@ -22,6 +22,7 @@ export default function Home() {
     availableusers,
     logoutUser,
     getMessages,
+    getUsers,
     messages,
     sendMessage,
   } = useContext(Usercontextp);
@@ -40,6 +41,10 @@ export default function Home() {
       getMessages();
     }
   }, [selectedUser]);
+
+  useEffect(() => {
+    getUsers(user);
+  }, [user]);
 
   return (
     <div className="relative w-full h-full rounded-2xl flex justify-center items-center overflow-hidden">

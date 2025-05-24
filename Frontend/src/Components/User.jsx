@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Usercontextp } from "../context/Usercontext";
 
 export default function User({ id, name, lastMessage }) {
-  const { selectedUser, setselectedUser, getMessages } =
+  const [isOnline, setisOnline] = useState(false);
+  const { onlineUsers, selectedUser, setselectedUser, getMessages } =
     useContext(Usercontextp);
   const handleClick = () => {
     const temp = {
@@ -13,6 +14,11 @@ export default function User({ id, name, lastMessage }) {
       setselectedUser(temp);
     }
   };
+  useEffect(() => {
+    if (Array.isArray(onlineUsers)) {
+      setisOnline(onlineUsers.includes(id));
+    }
+  }, [onlineUsers, id]);
 
   return (
     <div
@@ -23,11 +29,17 @@ export default function User({ id, name, lastMessage }) {
         <div className="rounded-full w-[50px] h-[50px] bg-white max-sm:w-[40px] max-sm:h-[40px]"></div>
       </div>
       <div className="w-[72%]  h-full flex flex-col justify-center gap-[3px]">
-        <h2 className="font text-[17px] text-white font-mont max-sm:text-[15px]">{name}</h2>
+        <h2 className="font text-[17px] text-white font-mont max-sm:text-[15px]">
+          {name}
+        </h2>
         <h3 className="text-gray-300 font-mont text-[12px]">{lastMessage}</h3>
       </div>
       <div className="w-[10%] ">
-        <h2 className="font-mont text-gray-400 max-sm:text-[10px]">12 m</h2>
+        <div
+          className={`font-mont h-[10px] w-[10px] rounded-full ${
+            isOnline ? "bg-green-400" : "bg-gray-300"
+          }`}
+        ></div>
       </div>
     </div>
   );
