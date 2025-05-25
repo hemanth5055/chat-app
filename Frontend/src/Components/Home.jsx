@@ -197,6 +197,7 @@ export default function Home() {
               {messages?.map((item) => (
                 <Message
                   key={item._id}
+                  time={item.createdAt}
                   self={user._id === item.senderId}
                   message={item.message}
                 />
