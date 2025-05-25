@@ -14,12 +14,9 @@ const httpServer = http.createServer(app);
 const corsOptions = {
   origin: "https://q-chat-three.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // Enable preflight for all routes
 
 app.use(express.json());
 
