@@ -54,6 +54,7 @@ async function signup(req, res) {
         const user = {
           email: userfromFrontend.email,
           name: userfromFrontend.name,
+          bio: userfromFrontend.bio,
           password: hashed_password,
         };
         const result = await User.create(user);
@@ -82,7 +83,7 @@ async function getUsers(req, res) {
   try {
     const result = await User.find(
       { _id: { $ne: req.user._id } },
-      { _id: 1, name: 1 }
+      { _id: 1, name: 1, bio: 1 }
     );
     if (!result)
       return res.json({ success: "false", msg: "Something went wrong" });

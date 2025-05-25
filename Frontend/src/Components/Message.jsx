@@ -1,4 +1,5 @@
 import React from "react";
+import userImg from "../assets/user.png";
 
 export default function Message({ self, message }) {
   return (
@@ -7,7 +8,9 @@ export default function Message({ self, message }) {
         self ? "flex-row-reverse" : ""
       }`}
     >
-      <div className="h-[40px] w-[40px] bg-gray-100 rounded-full"></div>
+      <div className="h-[40px] w-[40px] bg-gray-100 rounded-full">
+        <img src={userImg} className="w-full h-full scale-[0.5]" />
+      </div>
       <div
         className={`p-4 max-w-[40%] rounded-3xl max-sm:p-3  ${
           self ? "bg-[#42A4CB]" : "bg-[#3e404b]"

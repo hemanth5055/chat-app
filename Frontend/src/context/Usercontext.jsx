@@ -37,9 +37,7 @@ export const ContextFunc = ({ children }) => {
           token: token,
         },
       });
-      console.log(result);
       if (result) {
-        console.log(result.data);
         setAvailableusers(result.data.allusers);
       }
     } catch (error) {
@@ -89,15 +87,16 @@ export const ContextFunc = ({ children }) => {
       console.log(error);
     }
   };
-  const signupUser = async (name, email, password) => {
+  const signupUser = async (name, email, password, bio) => {
     try {
-      if (!email || !password || !name) {
+      if (!email || !password || !name || !bio) {
         console.log("Missing Details");
         return;
       }
       const result = await axios.post(`${serverURL}/api/auth/signup`, {
         name,
         email,
+        bio,
         password,
       });
       if (result.data.success == "true") {
@@ -133,7 +132,6 @@ export const ContextFunc = ({ children }) => {
         }
       );
       setMessages(result.data.messages);
-      console.log(result);
     } catch (error) {
       console.log(error.message);
     }
@@ -160,7 +158,6 @@ export const ContextFunc = ({ children }) => {
       );
       if (result.data.success === "true") {
         // Use the actual saved message from the response
-        console.log(result.data.msg);
         setMessages((prevMessages) => [
           ...(prevMessages || []),
           result.data.msgObj,

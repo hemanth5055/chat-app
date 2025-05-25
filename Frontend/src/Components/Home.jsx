@@ -5,6 +5,7 @@ import { PiChatCircleLight } from "react-icons/pi";
 import { MdLogout } from "react-icons/md";
 import { IoIosClose } from "react-icons/io";
 import { LuUsersRound } from "react-icons/lu";
+import userImg from "../assets/user.png";
 
 import User from "./User";
 import Message from "./Message";
@@ -94,12 +95,7 @@ export default function Home() {
           {/* User List */}
           <div className="w-full flex flex-col gap-[15px] mt-[10px] h-full overflow-y-auto">
             {availableusers?.map((item, index) => (
-              <User
-                name={item.name}
-                key={index}
-                id={item._id}
-                lastMessage="ok bye!"
-              />
+              <User bio={item.bio} name={item.name} key={index} id={item._id} />
             ))}
           </div>
 
@@ -150,7 +146,7 @@ export default function Home() {
               name={item.name}
               key={item._id}
               id={item._id}
-              lastMessage="ok bye!"
+              bio={item.bio}
             />
           ))}
         </div>
@@ -174,13 +170,15 @@ export default function Home() {
           {/* Chat Header */}
           <div className="w-full h-[80px] flex px-6 justify-between items-center">
             <div className="profile flex items-center gap-[15px]">
-              <div className="h-[40px] w-[40px] rounded-full bg-gray-200"></div>
+              <div className="h-[40px] w-[40px] rounded-full bg-gray-200">
+                <img src={userImg} className="w-full h-full scale-[0.5]" />
+              </div>
               <h2 className="font-mont text-[20px] text-white">
                 {selectedUser.name}
               </h2>
             </div>
             <div
-              className="clearchat cursor-pointer h-[40px] w-[40px] flex justify-center items-center"
+              className=" cursor-pointer h-[40px] w-[40px] flex justify-center items-center"
               onClick={() => {
                 setselectedUser(null);
               }}

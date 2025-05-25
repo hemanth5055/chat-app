@@ -7,9 +7,10 @@ export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [bio, setBio] = useState("");
   const data = useContext(Usercontextp);
   const handleSignup = async () => {
-    return data.signupUser(name, email, password);
+    return data.signupUser(name, email, password, bio);
   };
   useEffect(() => {
     if (data.user) {
@@ -26,7 +27,6 @@ export default function Signup() {
           name="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-
           placeholder="Good Name"
           className="w-[35%] max-sm:w-[80%] max-sm:text-[20px] bg-white h-[55px] rounded-3xl font-medium outline-none text-xl font-mont pl-4 text-black"
         />
@@ -35,8 +35,15 @@ export default function Signup() {
           name="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-
           placeholder="E-mail"
+          className="w-[35%] bg-white max-sm:w-[80%] max-sm:text-[20px] h-[55px] rounded-3xl font-medium outline-none text-xl font-mont pl-4 text-black"
+        />
+        <input
+          type="text"
+          name="bio"
+          value={bio}
+          onChange={(e) => setBio(e.target.value)}
+          placeholder="Bio"
           className="w-[35%] bg-white max-sm:w-[80%] max-sm:text-[20px] h-[55px] rounded-3xl font-medium outline-none text-xl font-mont pl-4 text-black"
         />
         <input
