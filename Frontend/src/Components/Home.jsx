@@ -50,7 +50,7 @@ export default function Home() {
   }, [user]);
 
   if (!loading) {
-    <div className="relative w-full h-full rounded-2xl flex justify-center items-center overflow-hidden">
+    return <div className="relative w-full h-full rounded-2xl flex justify-center items-center overflow-hidden">
       <div
         className="usersbar w-[25px] h-[25px] absolute  min-sm:hidden bg-amber-50 right-[5px] top-[0.5] rounded-[3px]
          flex justify-center items-center"
