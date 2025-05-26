@@ -10,6 +10,7 @@ import userImg from "../assets/user.png";
 import User from "./User";
 import Message from "./Message";
 import { Usercontextp } from "../context/Usercontext";
+import Loading from "./Loading";
 
 export default function Home() {
   const [usertosearch, setUsertosearch] = useState("");
@@ -25,6 +26,7 @@ export default function Home() {
     getMessages,
     getUsers,
     messages,
+    loading,
     sendMessage,
   } = useContext(Usercontextp);
   const SearchUser = () => {};
@@ -47,7 +49,7 @@ export default function Home() {
     getUsers(user);
   }, [user]);
 
-  return (
+  if (!loading) {
     <div className="relative w-full h-full rounded-2xl flex justify-center items-center overflow-hidden">
       <div
         className="usersbar w-[25px] h-[25px] absolute  min-sm:hidden bg-amber-50 right-[5px] top-[0.5] rounded-[3px]
@@ -245,6 +247,7 @@ export default function Home() {
           </h2>
         </div>
       )}
-    </div>
-  );
+    </div>;
+  }
+  return <Loading></Loading>;
 }

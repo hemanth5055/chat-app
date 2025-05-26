@@ -9,6 +9,7 @@ export const Usercontextp = React.createContext();
 export const ContextFunc = ({ children }) => {
   const [user, setUser] = useState(null);
   const [socketSt, setsocketSt] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [selectedUser, setselectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [availableusers, setAvailableusers] = useState(null);
@@ -45,6 +46,7 @@ export const ContextFunc = ({ children }) => {
     }
   };
   const checkAuth = async () => {
+    setLoading(true);
     if (!token) {
       navigate("/login");
     }
@@ -54,10 +56,9 @@ export const ContextFunc = ({ children }) => {
           token: token,
         },
       });
-      if (!result) {
-      }
       if (result.data.success == "true") {
         setUser(result.data.user);
+        setLoading(false);
         // getUsers(result.data.user);
         connectTosocket(result.data.user);
       } else {
@@ -199,6 +200,7 @@ export const ContextFunc = ({ children }) => {
     messages,
     socketSt,
     onlineUsers,
+    loading,
     getMessages,
     setMessages,
     setselectedUser,
